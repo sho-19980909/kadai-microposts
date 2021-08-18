@@ -30,4 +30,24 @@ class UsersController extends Controller
             'user' => $user,
         ]);
     }
+    
+    // 対象のUserを取得後に、関係するモデルの件数と投稿の一覧を取得して、ビューに渡す。
+    public function show($id)
+    {
+        // idの値でUserを検索して取得
+        $user = User::findOrFail($id);
+        
+        //関係するモデルの件数をロードする
+        // アクションでこのメソッドを $user->loadRelationshipCounts() のように呼び出し、ビューで $user->microposts_count のように件数を取得することになります。
+        $user->loadRelationShipCounts();
+        
+        // ユーザの投稿一覧を作成日時の降順で取得
+        $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
+        
+        // ユーザ詳細ビューでそれらを表示
+        return view('usrs.show', [
+            'user' => $user,
+            'microposts' => $microposts,
+        ]);
+    }
 }

@@ -17,12 +17,26 @@
         <div class="col-sm-8">
             <ul class="nav nav-tabs nav-justified mb-3">
                 {{-- ユーザ詳細タブ --}}
-                <li class="nav-item"><a href="#" class="nav-link">TimeLine</a></li>
+                <li class="nav-item">
+                    {{-- {{Request::routeIs('users,show'? 'active' : '')}} はリクエストされたルートが'users,show'なら、'active'という文字列が出力される--}}
+                    {{--(式1) ? (式2) : (式3) の形式は三項演算子。式1 が true なら 式2 、 式1 が false なら 式3 が値--}}
+                    
+                    <a href="{{ route('users.show', ['user' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.show') ? 'active' : '' }}">
+                        TimeLine
+                        <span class="badge badge-secondary">{{ $user->microposts_count }}</span>
+                    </a>
+                </li>
                 {{-- フォロー一覧タブ --}}
                 <li class="nav-item"><a href="#" class="nav-link">Followings</a></li>
                 {{-- フォロワー一覧タブ --}}
                 <li class="nav-item"><a href="#" class="nav-link">Followers</a></li>
             </ul>
+            @if (Auth::id() == $user->id)
+                {{-- 投稿フォーム --}}
+                @include('microposts.form')
+            @endif
+            {{-- 投稿一覧 --}}
+            @include('microposts.microposts')
         </div>
     </div>
 @endsection
