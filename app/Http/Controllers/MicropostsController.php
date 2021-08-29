@@ -6,24 +6,24 @@ use Illuminate\Http\Request;
 
 class MicropostsController extends Controller
 {
-    public function index ()
+     public function index()
     {
-        $date =[];
-        @if(Auth::cheeck()) {   //認証済みの場合
+        $data = [];
+        if (\Auth::check()) { // 認証済みの場合
             // 認証済みユーザを取得
-            $user = \Auth::$user();
-            
-            // ユーザの投稿の一覧を作成日時の降順で取得。
+            $user = \Auth::user();
+            // ユーザの投稿の一覧を作成日時の降順で取得
             // （後のChapterで他ユーザの投稿も取得するように変更しますが、現時点ではこのユーザの投稿のみ取得します）
             $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
-            
-            $date = [
+
+            $data = [
                 'user' => $user,
                 'microposts' => $microposts,
             ];
         }
-        //welcomビューでそれらを表示
-        return view('welcome', '$data');
+
+        // Welcomeビューでそれらを表示
+        return view('welcome', $data);
     }
     
     // storeアクションでは create メソッドを使ってMicropostを保存する

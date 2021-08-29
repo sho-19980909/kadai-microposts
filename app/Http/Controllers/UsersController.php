@@ -19,17 +19,17 @@ class UsersController extends Controller
         ]);
     }
     
-    //$id を利用して表示すべきユーザを特定するメソッド
-     public function show($id)
-    {
-        // idの値でユーザを検索して取得
-        $user = User::findOrFail($id);
+    // //$id を利用して表示すべきユーザを特定するメソッド
+    //  public function show($id)
+    // {
+    //     // idの値でユーザを検索して取得
+    //     $user = User::findOrFail($id);
 
-        // ユーザ詳細ビューでそれを表示
-        return view('users.show', [
-            'user' => $user,
-        ]);
-    }
+    //     // ユーザ詳細ビューでそれを表示
+    //     return view('users.show', [
+    //         'user' => $user,
+    //     ]);
+    // }
     
     // 対象のUserを取得後に、関係するモデルの件数と投稿の一覧を取得して、ビューに渡す。
     public function show($id)
@@ -45,9 +45,58 @@ class UsersController extends Controller
         $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
         
         // ユーザ詳細ビューでそれらを表示
-        return view('usrs.show', [
+        return view('users.show', [
             'user' => $user,
             'microposts' => $microposts,
         ]);
     }
+    
+    
+    /**
+     * ユーザのフォロー一覧ページを表示するアクション。
+     * 
+     * @param $id ユーザのid
+     * @return \Illuminate\Http\Response
+     */
+     public function followings($id)
+     {
+        // idの値でユーザを検索して取得。
+        $user = User::findOrFail($id);
+        
+        // 関係するモデルの件数をロード。
+         $user->loadRelationShipCounts();
+         
+        //  ユーザのフォロー一覧を取得。
+        $followings = $user->followings()->paginate(10);
+        
+        // フォロー一覧ビューでそれらを表示。
+        return view('users.followings', [
+            'user' => $user,
+            'users' => $followings,
+            ]);
+     }
+     
+     /**
+      * ユーザのフォロワー一覧を表示するアクション
+      * 
+      * @param  $id  ユーザのid
+     * @return \Illuminate\Http\Response
+     */
+     public function followers($id)
+     {
+        //  idの値でユーザを検索して取得。
+        $user = User::findOrFaill($id);
+        
+        // 関係するモデルの件数をロード
+        $user->loadRelationShipCounts();
+        
+        // ユーザのフォロワー一覧を取得。
+        $followers = $user->$followers()->paginate(10);
+        
+        // フォロワー一覧ビューでそれらを表示
+        return view('users.followers', [
+            'user' => $user,
+            'users' => $followers,
+        ]);
+     }
 }
