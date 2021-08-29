@@ -1,4 +1,4 @@
-//ユーザ詳細ページ
+{{--ユーザ詳細ページ--}}
 @extends('layouts.app')
 
 @section('content')
