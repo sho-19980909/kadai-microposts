@@ -17,4 +17,17 @@ class Micropost extends Model
         // belongsTo()は、「逆むきのリレーション」。（属している多側から１側を取得する）
         return $this->belongsTo(User::class);    
     }
+    
+    
+    public function favoriteUsers()
+    {
+        // belongsToの第一引数：関係先のModelクラスを指定する。
+        return $this->belongsToMany(User::class, 'favorites', 'micropost_id', 'user_id');
+    }
+    
+    // favorites数のカウント
+    // public function loadRelationshipCounts()
+    // {
+    //     $this->loadCount(['favorites']);
+    // }
 }

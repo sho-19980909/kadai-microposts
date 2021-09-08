@@ -1,4 +1,4 @@
-//ユーザ一覧をを表示する
+{{-- ユーザ一覧をを表示する --}}
 @extends('layouts.app')
 
 @section('content')
